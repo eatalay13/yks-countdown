@@ -1,5 +1,4 @@
 import Countdown from "@/components/Countdown";
-import moment from "moment";
 
 export default function Home() {
   return (
@@ -8,7 +7,7 @@ export default function Home() {
         YKS Geri Sayım
       </h1>
       <div className="text-center">
-        <Countdown targetDate={moment("2025-06-21T10:00").toDate()} />
+        <Countdown targetDate={new Date("2025-06-21T10:00")} />
       </div>
       <footer className="text-center text-neutral-content text-gray-600/50">
         <p>

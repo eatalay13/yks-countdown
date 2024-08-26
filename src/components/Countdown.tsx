@@ -1,34 +1,40 @@
 "use client";
 
 import moment from "moment";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface CountdownProps {
   targetDate: Date;
 }
 
+type CountdownTime = {
+  days: number;
+  hours: number;
+  minutes: number;
+  seconds: number;
+};
+
 function Countdown({ targetDate }: CountdownProps) {
-  const [countDownTime, setCountDownTIme] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
+  const [countDownTime, setCountDownTIme] = useState<CountdownTime>();
+
+  const startCountDown = useCallback(() => {
+    const now = moment.utc();
+    const diff = moment(targetDate).diff(now);
+    setCountDownTIme({
+      days: moment.duration(diff).asDays(),
+      hours: moment.duration(diff).hours(),
+      minutes: moment.duration(diff).minutes(),
+      seconds: moment.duration(diff).seconds(),
+    });
+  }, [targetDate]);
 
   useEffect(() => {
     const interval = setInterval(() => {
-      const now = moment.now();
-      const diff = moment(targetDate).diff(now);
-      setCountDownTIme({
-        days: moment.duration(diff).asDays(),
-        hours: moment.duration(diff).hours(),
-        minutes: moment.duration(diff).minutes(),
-        seconds: moment.duration(diff).seconds(),
-      });
+      startCountDown();
     }, 1000);
 
     return () => clearInterval(interval);
-  }, [targetDate]);
+  }, [startCountDown]);
 
   return (
     <div className="flex justify-center gap-3 sm:gap-8">
